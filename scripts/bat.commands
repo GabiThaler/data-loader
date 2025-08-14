@@ -11,5 +11,26 @@ oc apply -f data-loader/infrastructure/k8s/mysql-service.yaml
 
 
 
+#אני מאתחל את הנתונים ב mySQL
+
+# שומר את השם של הפוד של MYSQL במשתמנה
+
+$MYSQL_POD = oc get pod -l app=mysql -o jsonpath="{.items[0].metadata.name}"
+Write-Host "MySQL Pod: $MYSQL_POD"
 
 
+#אני העתקת את הקבצים
+
+oc cp "data-loader/scripts/create_data.sql" ${MYSQL_POD}:/tmp/create_data.sql
+oc cp "data-loader/scripts/insert_data.sql" ${MYSQL_POD}:/tmp/insert_data.sql
+
+
+# מריץ את אה יצירת טבלה של הSQL מתוך הפןד
+
+oc exec -i ${MYSQL_POD} -- bash -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" < /tmp/create_data.sql'
+
+# אני מרחץ את ההכנסה של פריטים לsql מתוך הפוד
+
+
+
+oc exec -i ${MYSQL_POD} -- bash -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" < /tmp/insert_data.sql'
