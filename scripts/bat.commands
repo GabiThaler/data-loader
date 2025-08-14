@@ -1,0 +1,15 @@
+#התחברתי לאופן שיפט שלי
+C:\Users\gmth0>oc login --token=sha256~hW4-Vk5qN94oh8isCwfgg-q_wdz5AOaqmNTHBjdY-kg --server=https://api.rm3.7wse.p1.openshiftapps.com:6443
+
+
+#חיברתי את הקצי ימל לאופן שיפט
+
+oc apply -f data-loader/infrastructure/k8s/mysql-pvc.yaml
+oc apply -f data-loader/infrastructure/k8s/mysql-secret.yaml
+oc apply -f data-loader/infrastructure/k8s/mysql-deployment.yaml
+oc apply -f data-loader/infrastructure/k8s/mysql-service.yaml
+
+
+
+
+
